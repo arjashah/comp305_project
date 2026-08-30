@@ -1,1 +1,1 @@
-A Report on Probabilistic Detection of Steganography
+A Project on Probabilistic Detection of Steganography
