@@ -1,1 +1,1 @@
-A Project on Probabilistic Detection of Steganography
+A Report on the mathematical models used in Steganography
