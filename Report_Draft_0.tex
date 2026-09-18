@@ -18,14 +18,21 @@
 \textbf{Based on:} Nicholas J. Hopper, John Langford, and Luis von Ahn, Provably Secure Steganography (2002)
 
 \section{Introduction}
-Steganography is the practice of communicating a secret message in such a way that an observer cannot determine that secret communication is taking place. This differs from cryptography, where the main objective is to hide the content of a message. In steganography, the existence of the hidden communication is itself intended to remain undetected.
 
+Steganography is the practice of hiding secret information within an ordinary, non-secret medium in such a way that the existence of the hidden information is concealed. The term comes from the Greek words \textit{steganos}, meaning “covered,” and \textit{graphein}, meaning “writing.” Unlike methods that simply protect the content of a message, steganography aims to make communication appear normal to an outside observer.
+
+Steganography differs from cryptography in its primary objective. Cryptography focuses mainly on protecting the meaning of information, while steganography focuses on hiding the existence of the information. The two techniques are often combined, with encrypted data being embedded inside a carrier.
+
+Steganography has applications in secure communication, digital watermarking, copyright protection, authentication, and information hiding. It can also be used to conceal sensitive data during transmission. In security research, steganography is studied to develop methods that allow hidden communication while remaining difficult for an observer or “warden” to detect.
+
+
+\subsection{About the Paper}
 Hopper, Langford, and von Ahn's \textit{Provably Secure Steganography} develops a formal mathematical foundation for this problem. At the time of the paper, much steganographic research focused on heuristic techniques, such as hiding information in images and video. The authors instead approach steganography from a complexity-theoretic perspective and define security using computational indistinguishability. They also study robustness against an active adversary, referred to as a \textbf{warden}, who may modify transmitted information.
 
 The central idea of the paper is to represent ordinary communication as a \textbf{probability distribution}. A steganographic encoder samples from this distribution and selects samples that can represent secret information. Probability theory is therefore fundamental to both the construction and analysis of the stegosystem.
 
 This report focuses on the mathematical and probabilistic models used in the paper, particularly the channel distribution, random variables, min-entropy, rejection sampling, computational indistinguishability, and the probabilistic analysis of robustness.
----
+
 \section{Problem Statement and Communication Model}
 The basic communication scenario involves \textbf{Alice}, \textbf{Bob}, and a \textbf{warden}. Alice wants to send a hidden message to Bob through a public channel while preventing the warden from detecting that hidden communication is occurring.
 The situation can be represented as:
@@ -103,15 +110,7 @@ The principal technique used by Hopper et al. is \textbf{rejection sampling}.
 Suppose the encoder needs to represent a hidden bit \(m_i\). It samples a normal channel block \(c\) and applies a function to that block. If the result corresponds to \(m_i\), the block is accepted. Otherwise, it is rejected and another channel sample is taken.
 Conceptually:
 \[
-c\leftarrow C_h^b
-\]
-\[
-\downarrow
-\]
-\[
-F_K(N,c)
-\]
-\[
+c\leftarrow C_h^b \rightarrow F_K(N,c) = 
 \begin{cases}
 \text{Match secret value} &\rightarrow \text{Accept }c\\
 \text{No match} &\rightarrow \text{Sample again}
@@ -242,35 +241,7 @@ X_1,\ldots,X_j
 The resulting martingale allows the use of \textbf{Azuma's inequality} to bound the probability of large deviations from the expected behaviour.
 This shows another application of probability theory in the paper: it is used not only to model normal channel behaviour but also to analyse an adversary's modifications.
 
-\section{Discussion and Conclusion}
-Hopper, Langford, and von Ahn's \textit{Provably Secure Steganography} provides a formal framework for analysing steganography using probability theory and computational complexity.
-The communication channel is represented as a conditional probability distribution:
-\[
-X_h\sim C_h^b.
-\]
-This allows ordinary communication to be treated as a random process rather than a fixed sequence of data. The minimum-entropy requirement
-\[
-H_\infty(C_h^b)>1
-\]
-ensures that the channel contains sufficient unpredictability for the proposed sampling techniques.
-Rejection sampling then provides the connection between probability and steganographic embedding. Instead of generating artificial cover data, the encoder repeatedly samples from the genuine channel and accepts a sample when it satisfies the condition needed to represent the secret information.
-The two constructions illustrate different ways of applying this principle. Construction 1 uses a pseudorandom function and state information, while Construction 2 combines encryption with an unbiased function. In both cases, the statistical properties of the channel are essential to the security argument.
-At the security level, computational indistinguishability measures whether a warden can distinguish stegotext from ordinary channel traffic. For active wardens, indicator variables, martingales, and Azuma's inequality provide additional probabilistic tools for analysing modifications.
-The paper ultimately connects these constructions to fundamental cryptographic assumptions. It argues that one-way functions are sufficient for constructing secure steganographic protocols and concludes that, within its asymptotic framework, the existence of secure steganography is equivalent to the existence of one-way functions.
-Overall, the mathematical framework can be summarized as:
-\[
-\boxed{\text{Probability models the channel}}
-\]
-\[
-\boxed{\text{Entropy measures its unpredictability}}
-\]
-\[
-\boxed{\text{Rejection sampling performs the embedding}}
-\]
-\[
-\boxed{\text{Computational indistinguishability defines secrecy}}
-\]
-Thus, probability is not simply an analytical tool applied after a steganographic system is designed. It is a fundamental part of the model used to define the channel, construct the hidden communication, and prove its security.
+
 \section{References}
 Hopper, N. J., Langford, J., \& von Ahn, L. (2002). \textit{Provably Secure Steganography}. Carnegie Mellon University, School of Computer Science, Technical Report CMU-CS-02-149.
 The paper also discusses earlier work on the Prisoner's Problem, information-theoretic models of steganography, and previous practical approaches to hiding information in digital media.
